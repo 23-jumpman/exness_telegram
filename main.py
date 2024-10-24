@@ -12,7 +12,6 @@ from telegram.ext import (
 )
 
 TOKEN = os.environ['TOKEN']
-
 MENU, INFO = range(2)
 
 async def start(update: Update, context: CallbackContext) -> int:
@@ -86,7 +85,7 @@ def start_server():
     
     # Instantiate with uvicorn
     # Allows to run fastapi without using 'fastapi' 
-    uvicorn.run(app)
+    uvicorn.run(app, port=8080, host='0.0.0.0')
     
 if __name__ == "__main__":
     # Run server as a thread so it doesn't block the Telegram loop
