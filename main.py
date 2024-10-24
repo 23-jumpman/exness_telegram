@@ -109,8 +109,6 @@ if __name__ == "__main__":
     while True:
         if BOT_OPTIONS['start']:            
             telegram_thread()
+            
         # Cool down
         time.sleep(5)
-
-
-
