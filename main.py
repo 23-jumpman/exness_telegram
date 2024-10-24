@@ -11,7 +11,6 @@ from telegram.ext import (
     filters,
 )
 
-os.environ['TOKEN'] = "8059199795:AAEKwaUaDftfZHK_je4VmWg_F6nldB_mfPE"
 TOKEN = os.environ['TOKEN']
 
 MENU, INFO = range(2)
