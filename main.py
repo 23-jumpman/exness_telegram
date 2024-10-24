@@ -37,7 +37,7 @@ async def button(update: Update, context: CallbackContext) -> int:
             [InlineKeyboardButton("Start Trading!", web_app=WebAppInfo(url="https://www.exness.global/webterminal/"))],
         ]
         reply_markup = InlineKeyboardMarkup(keyboard)
-        await send(user_id, "Ever want to trade signals without having to jump from app to app? Or perhaps trade while chatting with friends?\nHere you'll get access to an Exness MetaTrader terminal from within Telegram!\n\n(This web-app is a wrapper around the Exness APIs and not affiliated with the Exness team. But it is completely private, secure, and does not save your credentials or have any telemetry whatsoever.)", reply_markup=reply_markup)
+        await send(user_id, "Ever want to trade signals without having to jump from app to app?\n\nOr perhaps trade while chatting with friends?\n\nHere you'll get access to the Exness MetaTrader from within Telegram!\n\n(This web-app is a wrapper around the Exness APIs and not affiliated with the Exness team.\n\nBut it is completely private, secure, and does not save your credentials or have any telemetry.)", reply_markup=reply_markup)
         return INFO
     else:
         await query.edit_message_text(text="Unknown option selected.")
@@ -84,15 +84,17 @@ def start_server():
         return {"Info": "A telegram wrapper for https://www.exness.global/webterminal/"}
     
     # Instantiate with uvicorn
-    # Allows to run fastapi without using 'fastapi' 
+    # Allows to run fastapi without using 'fastapi' CLI
     uvicorn.run(app, port=8080, host='0.0.0.0')
     
 if __name__ == "__main__":
     # Run server as a thread so it doesn't block the Telegram loop
     server_thread = threading.Thread(target=start_server)
+
+    # Set thread as daemon so it dies on main program exit
     server_thread.daemon = True
     server_thread.start()
-    
+
     telegram_thread()
 
 
