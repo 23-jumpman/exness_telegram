@@ -1,4 +1,4 @@
-import threading, uvicorn, os
+import threading, uvicorn, time, os
 from fastapi import FastAPI
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo, Bot
 from telegram.ext import (
@@ -12,6 +12,8 @@ from telegram.ext import (
 )
 
 TOKEN = os.environ['TOKEN']
+BOT_OPTIONS = {'start': False}
+
 MENU, INFO = range(2)
 
 async def start(update: Update, context: CallbackContext) -> int:
@@ -83,6 +85,14 @@ def start_server():
     def home():
         return {"Info": "A telegram wrapper for https://www.exness.global/webterminal/"}
     
+    # Render tends to have multiple deployments running at the same time
+    # Which can cause the program to crash if there are multiple bots requesting updates
+    # A work-around, is to activate the bot manually after the deployment is successful
+    @app.get("/start")
+    def start():
+        BOT_OPTIONS['start'] = True
+        return {"Log": "Starting bot."}
+    
     # Instantiate with uvicorn
     # Allows to run fastapi without using 'fastapi' CLI
     uvicorn.run(app, port=8080, host='0.0.0.0')
@@ -95,7 +105,12 @@ if __name__ == "__main__":
     server_thread.daemon = True
     server_thread.start()
 
-    telegram_thread()
+    # Run if /start is requested
+    while True:
+        if BOT_OPTIONS['start']:            
+            telegram_thread()
+        # Cool down
+        time.sleep(5)
 
 
 
