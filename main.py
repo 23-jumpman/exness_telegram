@@ -89,7 +89,10 @@ def start_server():
     
 if __name__ == "__main__":
     # Run server as a thread so it doesn't block the Telegram loop
-    threading.Thread(target=start_server).start()
+    server_thread = threading.Thread(target=start_server)
+    server_thread.daemon = True
+    server_thread.start()
+    
     telegram_thread()
 
 
